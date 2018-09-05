@@ -14,9 +14,6 @@ body{
     background: #fff;
     width: 250px;
     border-radius: 10px;
-    position: absolute;
-    z-index: 99;
-    display: none;
   }
   .header{
     color: #fff;
@@ -29,7 +26,7 @@ body{
   .body {
     padding: 5px;
     height: 80px;
-    overflow: hidden;
+    overflow: auto;
   }
   .title{
     color: #ff8663;
@@ -60,7 +57,7 @@ body{
     border: none;
     
   }
-  /* .map .ymaps-2-1-68-balloon__layout, .ymaps-2-1-68-balloon__content {
+  .map .ymaps-2-1-68-balloon__layout, .ymaps-2-1-68-balloon__content {
     background: none!important;
 }
 .map .ymaps-2-1-68-balloon {
@@ -72,4 +69,4 @@ body{
 }
 .map .ymaps-2-1-68-balloon__tail {
     top: -25px;
-} */
+}
