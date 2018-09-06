@@ -5,6 +5,8 @@ ymaps.ready(init);
 
 function init () {
     var objMap = {};
+    var count = 0;
+    var d = new Date();
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
@@ -12,7 +14,7 @@ function init () {
     window.clusterer = new ymaps.Clusterer({
         preset: 'islands#invertedVioletClusterIcons',
         clusterDisableClickZoom: true,
-        clusterBalloonContentBodyLayout: "cluster#balloonCarouselContent"
+        clusterBalloonContentLayout: "cluster#balloonCarousel"
     
     }); 
 
@@ -47,7 +49,8 @@ function init () {
             for (var i = 0; i < geoObjects.length; i++) {
      
                 var id = geoObjects[i].properties;
-                console.log(id);
+                const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__content');
+                balloon__content.style.background = '#fff';
      
             }
      
@@ -61,9 +64,21 @@ function init () {
 
      });
  function bolloonTemp(coords, object) {
+     var date = [];
      if (object) {
-        console.log(object.properties.get('text'));
-     }
+        for (let key in objMap) {
+            if (objMap.hasOwnProperty(key)) {
+
+               var eq = JSON.stringify(objMap[key].coords) == JSON.stringify(object.geometry._coordinates);
+                    if (eq) {
+                        date.push(objMap[key]);
+                    }
+            }
+        }
+        console.log(date);
+        
+     } 
+    
     ymaps.geocode(coords)
     .then(function (res) {
     const points = res.geoObjects.get(0).properties.get('text');
@@ -89,6 +104,16 @@ function init () {
         build: function () {
             BalloonContentLayout.superclass.build.call(this);
             var that = this;
+            if (date.length > 0) {
+                for (const key in date) {
+                    if (date.hasOwnProperty(key)) {
+                        const body = document.querySelector('.body');
+                        const div = document.createElement('div');
+                        div.innerHTML = date[key].message;
+                        body.appendChild(div);
+                    }
+                }
+            }
             document.getElementById('btn').addEventListener('click', function(e){
                 e.preventDefault();
                 const name = document.getElementById('name').value;
@@ -96,7 +121,7 @@ function init () {
                 const message = document.getElementById('message').value;
                 const body = document.querySelector('.body');
                 const div = document.createElement('div');
-                div.innerHTML = `<b>${name}</b> <span>${point}</span><br/><p>${message}</p>`;
+                div.innerHTML = `<div id="review"><b>${name}</b> <span>${point}</span><span class="data">${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}</span><p>${message}</p></div>`;
                 body.appendChild(div);
                 that.onContent(name, point, message);
             })
@@ -110,9 +135,11 @@ function init () {
 
         onContent: function (name, point, message) {
             
+            objMap[count++] = {coords:coords, name: name,date:d.toString(),message: `<div id="review"><b>${name}</b> <span>${point}</span><span class="data">${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}</span><p>${message}</p></div>`};
+
             var Placemark = new ymaps.Placemark(coords, {
                 
-                balloonContent: `<b>${name}</b> <span>${point}</span><br/><p>${message}</p>`
+                balloonContent: `<div id="review"><b>${name}</b> <span>${point}</span><span class="data">${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}</span><p>${message}</p></div>`
             },{
                 balloonContentBodyLayout: BalloonContentLayout,
                 balloonPanelMaxMapArea: 0,
@@ -120,7 +147,7 @@ function init () {
             });
             
             window.clusterer.add(Placemark);
-  
+ 
             // clusterer.geoObjects.add(objMap.coords);
             // buildObj(objMap);
         }
