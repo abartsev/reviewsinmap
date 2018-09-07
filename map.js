@@ -41,7 +41,7 @@ function init () {
         if (object.getGeoObjects) {
      
             // клик был на кластере
-     
+     console.log(object);
             var geoObjects = object.getGeoObjects();
      
             // получили массив геообъектов в составе кластера и теперь в цикле их обработаем
@@ -49,20 +49,26 @@ function init () {
             for (var i = 0; i < geoObjects.length; i++) {
      
                 var id = geoObjects[i].properties;
-                const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__content');
-                balloon__content.style.background = '#fff';
-     
+                setTimeout(function () {
+                    const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
+                    balloon__content.classList.add('active');
+                }, 100);
+
+                function EventList();
             }
-     
          } else {
-     
-            // клик был по метке
-            
+            // клик был по метке   
             bolloonTemp(coords, object);
      
          }
 
      });
+function EventList() {
+        const linckCoords = document.querySelector('.linckCoords');
+        linckCoords.addEventListener('click', function () {
+            console.log(this);
+        });
+     }
  function bolloonTemp(coords, object) {
      var date = [];
      if (object) {
@@ -75,7 +81,6 @@ function init () {
                     }
             }
         }
-        console.log(date);
         
      } 
     
@@ -138,8 +143,9 @@ function init () {
             objMap[count++] = {coords:coords, name: name,date:d.toString(),message: `<div id="review"><b>${name}</b> <span>${point}</span><span class="data">${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}</span><p>${message}</p></div>`};
 
             var Placemark = new ymaps.Placemark(coords, {
-                
-                balloonContent: `<div id="review"><b>${name}</b> <span>${point}</span><span class="data">${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}</span><p>${message}</p></div>`
+                balloonContentHeader: `<b>${point}</b>`,
+                balloonContentBody: `<div id="review"><a class="linckCoords" href="javascript:void(0);" data-coords="${coords}">${points}</a> <p>${message}</p></div>`,
+                balloonContentFooter: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}`,
             },{
                 balloonContentBodyLayout: BalloonContentLayout,
                 balloonPanelMaxMapArea: 0,

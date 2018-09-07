@@ -57,9 +57,13 @@ body{
     border: none;
     
   }
+  .map .ymaps-2-1-68-balloon__layout.active{
+    background: #fff!important;
+}
   .map .ymaps-2-1-68-balloon__layout, .ymaps-2-1-68-balloon__content {
     background: none!important;
 }
+
 .map .ymaps-2-1-68-balloon {
     box-shadow: none!important;
 }
