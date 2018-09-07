@@ -31,30 +31,21 @@ function init () {
     });  
    
     clusterer.events.add('click', function (e) {
-
-        // получаем ссылку на объект, по которому кликнули
-     
          var object = e.get('target');
          var coords = e.get('coords');
-         
-     
         if (object.getGeoObjects) {
-     
-            // клик был на кластере
-     console.log(object);
             var geoObjects = object.getGeoObjects();
-     
-            // получили массив геообъектов в составе кластера и теперь в цикле их обработаем
-     
+            setTimeout(function () {
+                const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
+                balloon__content.classList.add('active');
+                EventList();
+            }, 100);
             for (var i = 0; i < geoObjects.length; i++) {
      
                 var id = geoObjects[i].properties;
-                setTimeout(function () {
-                    const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
-                    balloon__content.classList.add('active');
-                }, 100);
+                
 
-                function EventList();
+                
             }
          } else {
             // клик был по метке   
@@ -65,13 +56,19 @@ function init () {
      });
 function EventList() {
         const linckCoords = document.querySelector('.linckCoords');
-        linckCoords.addEventListener('click', function () {
-            console.log(this);
-        });
+        if (linckCoords) {
+            linckCoords.addEventListener('click', function () {
+                var addr = this.getAttribute('data-coords').split(',');
+                let flag = 'Y';
+                myMap.balloon.close();
+                bolloonTemp(addr, flag);
+            }); 
+        }
+       
      }
  function bolloonTemp(coords, object) {
      var date = [];
-     if (object) {
+     if (object && object != 'Y') {
         for (let key in objMap) {
             if (objMap.hasOwnProperty(key)) {
 
@@ -82,7 +79,18 @@ function EventList() {
             }
         }
         
-     } 
+     } else if(object == 'Y'){
+        object = [coords[0].replace(/"/g),coords[1].replace(/"/g)];
+        for (let key in objMap) {
+            if (objMap.hasOwnProperty(key)) {
+
+               var eq = JSON.stringify(objMap[key].coords) == JSON.stringify(object).replace(/"/g, '');
+                    if (eq) {
+                        date.push(objMap[key]);
+                    }
+            }
+        }
+     }
     
     ymaps.geocode(coords)
     .then(function (res) {
