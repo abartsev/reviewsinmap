@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './index',
+    entry: './map',
     output: {
         filename: 'build.js'
     },

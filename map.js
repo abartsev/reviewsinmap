@@ -20,54 +20,51 @@ function init () {
 
     myMap.geoObjects.add(clusterer);
     myMap.events.add('click', function (e) {
-        if (!myMap.balloon.isOpen()) {
-            var coords = e.get('coords');
-            bolloonTemp(coords);
+        
+        if (window.balloon) {
+            balloon.close();
+        }
             
-        }
-        else {
-            myMap.balloon.close();
-        }
+            var coords = e.get('coords');
+            bolloonTemp(coords);       
+
     });  
    
     clusterer.events.add('click', function (e) {
          var object = e.get('target');
-         var coords = e.get('coords');
+         //var coordsMap = e.get('coords');
+         
         if (object.getGeoObjects) {
-            var geoObjects = object.getGeoObjects();
+            //var geoObjects = object.getGeoObjects();
             setTimeout(function () {
                 const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
                 balloon__content.classList.add('active');
-                EventList();
             }, 100);
-            for (var i = 0; i < geoObjects.length; i++) {
-     
-                var id = geoObjects[i].properties;
-                
-
-                
-            }
          } else {
             // клик был по метке   
-            bolloonTemp(coords, object);
+            bolloonTemp(object.geometry._coordinates, object);
      
          }
 
      });
-function EventList() {
-        const linckCoords = document.querySelector('.linckCoords');
-        if (linckCoords) {
-            linckCoords.addEventListener('click', function () {
-                var addr = this.getAttribute('data-coords').split(',');
-                let flag = 'Y';
-                myMap.balloon.close();
-                bolloonTemp(addr, flag);
+
+
+            document.addEventListener('click', function (e) {
+                
+                if (e.target.className == 'linckCoords') {
+                    var arrCoord = e.target.dataset.coords.split(',');
+                    
+                    var addr = [Number(arrCoord[0]),Number(arrCoord[1])];
+                    let flag = 'Y';
+                    myMap.balloon.close();
+                    bolloonTemp(addr, flag);
+                }
+                
             }); 
-        }
-       
-     }
+
  function bolloonTemp(coords, object) {
      var date = [];
+     console.log(objMap);
      if (object && object != 'Y') {
         for (let key in objMap) {
             if (objMap.hasOwnProperty(key)) {
@@ -80,7 +77,7 @@ function EventList() {
         }
         
      } else if(object == 'Y'){
-        object = [coords[0].replace(/"/g),coords[1].replace(/"/g)];
+        object = coords;
         for (let key in objMap) {
             if (objMap.hasOwnProperty(key)) {
 
@@ -167,7 +164,7 @@ function EventList() {
         }
     });
     
-    var balloon = new ymaps.Balloon(myMap, {
+    window.balloon = new ymaps.Balloon(myMap, {
         contentLayout: BalloonContentLayout
     });
         balloon.options.setParent(myMap.options);
