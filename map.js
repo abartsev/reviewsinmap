@@ -8,7 +8,7 @@ function init () {
     var count = 0;
     var d = new Date();
     myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
+        center:[59.938, 30.314],
         zoom: 11
     });
     window.clusterer = new ymaps.Clusterer({
@@ -30,28 +30,28 @@ function init () {
 
     });  
    
-    clusterer.events.add('click', function (e) {
-         var object = e.get('target');
-         //var coordsMap = e.get('coords');
+    // clusterer.events.add('click', function (e) {
+    //      var object = e.get('target');
+    //      //var coordsMap = e.get('coords');
          
-        if (object.getGeoObjects) {
-            //var geoObjects = object.getGeoObjects();
-            setTimeout(function () {
-                const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
-                balloon__content.classList.add('active');
-            }, 100);
-         } else {
-            // клик был по метке   
-            bolloonTemp(object.geometry._coordinates, object);
+    //     if (object.getGeoObjects) {
+    //         //var geoObjects = object.getGeoObjects();
+    //         setTimeout(function () {
+    //             const balloon__content = document.querySelector('.ymaps-2-1-68-balloon__layout');
+    //             balloon__content.classList.add('active');
+    //         }, 100);
+    //      } else {
+    //         // клик был по метке   
+    //         bolloonTemp(object.geometry._coordinates, object);
      
-         }
+    //      }
 
-     });
+    //  });
 
 
             document.addEventListener('click', function (e) {
                 
-                if (e.target.className == 'linckCoords') {
+                if (e.target.className == 'linkCoords') {
                     var arrCoord = e.target.dataset.coords.split(',');
                     
                     var addr = [Number(arrCoord[0]),Number(arrCoord[1])];
@@ -64,7 +64,7 @@ function init () {
 
  function bolloonTemp(coords, object) {
      var date = [];
-     console.log(objMap);
+    
      if (object && object != 'Y') {
         for (let key in objMap) {
             if (objMap.hasOwnProperty(key)) {
@@ -149,7 +149,7 @@ function init () {
 
             var Placemark = new ymaps.Placemark(coords, {
                 balloonContentHeader: `<b>${point}</b>`,
-                balloonContentBody: `<div id="review"><a class="linckCoords" href="javascript:void(0);" data-coords="${coords}">${points}</a> <p>${message}</p></div>`,
+                balloonContentBody: `<div id="review"><a class="linkCoords" href="javascript:void(0);" data-coords="${coords}">${points}</a> <p>${message}</p></div>`,
                 balloonContentFooter: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}`,
             },{
                 balloonContentBodyLayout: BalloonContentLayout,
